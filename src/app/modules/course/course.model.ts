@@ -2,16 +2,21 @@ import { Schema, model } from 'mongoose';
 import { TCourse, TDetails, TTag } from './course.interface';
 
 //Sub schema [tagSchema] for main schema tags property
-const tagSchema = new Schema<TTag>({
-  name: {
-    type: String,
-    required: true,
+const tagSchema = new Schema<TTag>(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  isDeleted: {
-    type: Boolean,
-    default: false,
+  {
+    _id: false,
   },
-});
+);
 
 //Sub schema [detailsSchema] for main schema details property
 const detailsSchema = new Schema<TDetails>({
@@ -25,7 +30,6 @@ const detailsSchema = new Schema<TDetails>({
     required: true,
   },
 });
-
 
 //Main schema [courseSchema]
 const courseSchema = new Schema<TCourse>({
@@ -73,6 +77,5 @@ const courseSchema = new Schema<TCourse>({
   },
 });
 
-//course model 
+//course model
 export const Course = model<TCourse>('Course', courseSchema);
-
