@@ -13,7 +13,7 @@ const createCategoryForCourse = catchAsync(async (req, res) => {
 
 
 const getAllCategories = catchAsync(async (req, res) => {
-  const result = await CategoryServices.getAllCategoriesFromDB;
+  const result = await CategoryServices.getAllCategoriesFromDB();
   res.status(200).json({
     success: true,
     statusCode: 200,
