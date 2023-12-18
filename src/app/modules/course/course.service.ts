@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
+import QueryManager from '../../manager/queryManager';
 import { TCourse } from './course.interface';
 import { Course } from './course.model';
 
@@ -17,7 +18,8 @@ const createCourseIntoDB = async (payload: TCourse) => {
 };
 
 const getAllCourseFromDB = async (query: Record<string, unknown>) => {
-  const result = await Course.find();
+  const allCourse = new QueryManager(Course.find(), query).pagination();
+  const result = await allCourse.modelQuery;
 
   const meta = {
     page: query.page || 1,
@@ -25,7 +27,7 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
     total: result.length,
   };
 
-  return {result,meta};
+  return { result, meta };
 };
 
 export const CourseServices = {

@@ -1,4 +1,5 @@
 import { Query } from 'mongoose';
+import AppError from '../errors/appError';
 
 class QueryManager<T> {
   public modelQuery: Query<T[], T>;
@@ -15,6 +16,32 @@ class QueryManager<T> {
     const skip = (page - 1) * limit;
 
     this.modelQuery = this.modelQuery.skip(skip).limit(limit);
+    return this;
+  }
+
+  sortBy() {
+    const sort = this?.query?.sortBy || 'createdAt';
+
+    const sortByFields = [
+      'title',
+      'price',
+      'startDate',
+      'endDate',
+      'language',
+      'durationInWeeks',
+      'createdAt',
+    ];
+
+    sortByFields.forEach(field =>{
+        console.log(sort);
+        if (sort !== field) {
+            throw new AppError(500,"Please put a valid string.")
+          }
+    })
+
+    this.modelQuery = this?.modelQuery?.sort(sort as string);
+
+    return this;
   }
 }
 
