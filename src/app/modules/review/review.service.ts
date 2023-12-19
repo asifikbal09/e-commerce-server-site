@@ -6,6 +6,16 @@ const createReviewForCourseIntoDB = async (payload: TReview) => {
   return result;
 };
 
+const getAllReview = async () => {
+  const result = await Review.aggregate([
+    {
+      $group:{}
+    }
+  ]);
+  return result;
+};
+
 export const ReviewServices = {
   createReviewForCourseIntoDB,
+  getAllReview,
 };

@@ -13,6 +13,19 @@ const createReviewForCourse = catchAsync(async (req, res) => {
   });
 });
 
+//For testing
+const getAllReview = catchAsync(async (req, res) => {
+  const result = await ReviewServices.getAllReview();
+
+  res.status(httpStatus.CREATED).json({
+    success: true,
+    statusCode: httpStatus.CREATED,
+    message: 'Review created successfully',
+    data: result,
+  });
+});
+
 export const ReviewController = {
   createReviewForCourse,
+  getAllReview,
 };

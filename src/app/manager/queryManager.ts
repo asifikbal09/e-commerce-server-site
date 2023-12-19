@@ -21,6 +21,7 @@ class QueryManager<T> {
 
   sortBy() {
     const sort = this?.query?.sortBy || 'createdAt';
+    const sortInOrder = this.query.sortOrder || 'asc';
 
     const sortByFields = [
       'title',
@@ -32,17 +33,30 @@ class QueryManager<T> {
       'createdAt',
     ];
 
-    sortByFields.forEach(field =>{
-        console.log(sort);
-        if (sort !== field) {
-            throw new AppError(500,"Please put a valid string.")
-          }
-    })
+    if (!sortByFields.includes(sort as string)) {
+      throw new AppError(500, 'Please put a valid string.');
+    }
 
-    this.modelQuery = this?.modelQuery?.sort(sort as string);
+    if (sortInOrder === 'asc') {
+      this.modelQuery = this?.modelQuery?.sort(sort as string);
+    }
+
+    if (sortInOrder === 'desc') {
+      this.modelQuery = this?.modelQuery?.sort(('-' + sort) as string);
+    }
 
     return this;
   }
+  filterByPrice() {
+    const minPrice = Number(this.query.minPrice) || 0;
+    const maxPrice = Number(this.query.maxPrice) || 1000;
+
+    this.modelQuery = this.modelQuery.find({
+      price: { $gte: minPrice, $lte: maxPrice },
+    });
+    return this;
+  }
+  
 }
 
 export default QueryManager;

@@ -18,7 +18,10 @@ const createCourseIntoDB = async (payload: TCourse) => {
 };
 
 const getAllCourseFromDB = async (query: Record<string, unknown>) => {
-  const allCourse = new QueryManager(Course.find(), query).pagination();
+  const allCourse = new QueryManager(Course.find(), query)
+    .pagination()
+    .sortBy()
+    .filterByPrice();
   const result = await allCourse.modelQuery;
 
   const meta = {
