@@ -21,7 +21,9 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
   const allCourse = new QueryManager(Course.find(), query)
     .pagination()
     .sortBy()
-    .filterByPrice();
+    .filterByPrice()
+    .filterByTags()
+    .filterByDate();
   const result = await allCourse.modelQuery;
 
   const meta = {
