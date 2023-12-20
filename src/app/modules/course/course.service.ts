@@ -123,7 +123,30 @@ const updateCourseDataIntoDB = async (
     { new: true },
   );
 
-  return basicDataUpdate;
+  if (tags && tags.length > 0) {
+    console.log(tags);
+    const deletedTagsName = tags
+      .filter((tag) => tag.name && tag.isDeleted)
+      .map((tag) => tag.name);
+
+    const deletedTags = await Course.findByIdAndUpdate(
+      id,
+      {
+        $pull: { tags: { name: { $in: deletedTagsName } } },
+      },
+      { new: true },
+    );
+
+    const addTagsName = tags.filter((tag) => tag.name && !tag.isDeleted);
+
+    const addTags = await Course.findByIdAndUpdate(id, {
+      $addToSet: { tags: { $each: addTagsName } },
+    });
+  }
+
+  const course = await Course.findById(id);
+
+  return course;
 };
 
 export const CourseServices = {
