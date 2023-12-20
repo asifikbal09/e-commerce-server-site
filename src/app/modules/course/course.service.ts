@@ -66,8 +66,44 @@ const getCourseWithReviewFromDB = async (id: Types.ObjectId) => {
   return { course, reviews };
 };
 
+const getTheBestCourseFromDB = async () => {
+  const findBestCourse = await Course.aggregate([
+    {
+      $lookup: {
+        from: 'reviews',
+        localField: '_id',
+        foreignField: 'courseId',
+        as: 'reviews',
+      },
+    },
+    {
+      $unwind: '$reviews',
+    },
+    {
+      $group: {
+        _id: '$_id',
+        reviewCount: { $sum: 1 },
+        averageRating: { $avg: '$reviews.rating' },
+      },
+    },
+    {
+      $sort: { averageRating: -1 },
+    },
+    {
+      $limit: 1,
+    },
+  ]);
+
+  const course = await Course.findById(findBestCourse[0]._id);
+  const averageRating = findBestCourse[0].averageRating;
+  const reviewCount = findBestCourse[0].reviewCount;
+
+  return { course, averageRating, reviewCount };
+};
+
 export const CourseServices = {
   createCourseIntoDB,
   getAllCourseFromDB,
   getCourseWithReviewFromDB,
+  getTheBestCourseFromDB,
 };

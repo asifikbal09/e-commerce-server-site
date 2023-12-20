@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CourseServices } from './course.service';
-import {ObjectId} from "mongodb"
+import { ObjectId } from 'mongodb';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 
@@ -28,8 +28,10 @@ const getAllCourse = catchAsync(async (req, res) => {
 
 const getCourseWithReview = catchAsync(async (req, res) => {
   const courseId = req.params.courseId;
-  
-  const result = await CourseServices.getCourseWithReviewFromDB(new ObjectId(courseId));
+
+  const result = await CourseServices.getCourseWithReviewFromDB(
+    new ObjectId(courseId),
+  );
   res.status(httpStatus.OK).json({
     success: true,
     statusCode: httpStatus.OK,
@@ -38,8 +40,19 @@ const getCourseWithReview = catchAsync(async (req, res) => {
   });
 });
 
+const getTheBestCourse = catchAsync(async (req, res) => {
+  const data = await CourseServices.getTheBestCourseFromDB();
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Best course retrieved successfully',
+    data: data,
+  });
+});
+
 export const CourseController = {
   createCourse,
   getAllCourse,
   getCourseWithReview,
+  getTheBestCourse,
 };
