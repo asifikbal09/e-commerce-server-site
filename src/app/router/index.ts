@@ -7,7 +7,7 @@ const router = Router();
 
 const moduleRoutes = [
   {
-    path: '/course',
+    path: '/courses',
     route: CourseRoutes,
   },
   {

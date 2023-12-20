@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
+import { Types, isValidObjectId } from 'mongoose';
 import QueryManager from '../../manager/queryManager';
 import { TCourse } from './course.interface';
 import { Course } from './course.model';
@@ -30,8 +31,6 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
     .filterByWeeks();
   const result = await courseQuery.modelQuery;
 
-
-
   const meta = {
     page: query.page || 1,
     limit: query.limit || 10,
@@ -41,7 +40,34 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
   return { result, meta };
 };
 
+const getCourseWithReviewFromDB = async (id: Types.ObjectId) => {
+  const findCourseReview = await Course.aggregate([
+    //stage-1
+    //LookUp stage
+    {
+      $lookup: {
+        from: 'reviews',
+        localField: '_id',
+        foreignField: 'courseId',
+        as: 'reviews',
+      },
+    },
+    //Stage-2
+    //Match by id
+    {
+      $match: { _id: id },
+    },
+  ]);
+
+  const course = await Course.findById(id);
+
+  const reviews = findCourseReview[0].reviews;
+
+  return { course, reviews };
+};
+
 export const CourseServices = {
   createCourseIntoDB,
   getAllCourseFromDB,
+  getCourseWithReviewFromDB,
 };

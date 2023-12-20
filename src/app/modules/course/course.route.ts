@@ -1,16 +1,10 @@
 import { Router } from 'express';
 import { CourseController } from './course.controller';
-import validateRequest from '../../middlewares/validateRequest';
-import { CourseValidation } from './course.validation';
+
 
 const router = Router();
 
-router.post(
-  '/',
-  validateRequest(CourseValidation.courseValidationSchema),
-  CourseController.createCourse,
-);
-
-router.get('/courses', CourseController.getAllCourse);
+router.get('/', CourseController.getAllCourse);
+router.get('/:courseId/reviews', CourseController.getCourseWithReview);
 
 export const CourseRoutes = router;
