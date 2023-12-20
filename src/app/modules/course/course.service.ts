@@ -107,9 +107,19 @@ const updateCourseDataIntoDB = async (
 ) => {
   const { tags, details, ...remainingCourseData } = payload;
 
+  const modifiedUpdatedData: Record<string, unknown> = {
+    ...remainingCourseData,
+  };
+
+  if (details && Object.keys(details).length) {
+    for (const [key, value] of Object.entries(details)) {
+      modifiedUpdatedData[`details.${key}`] = value;
+    }
+  }
+
   const basicDataUpdate = await Course.findByIdAndUpdate(
     id,
-    remainingCourseData,
+    modifiedUpdatedData,
     { new: true },
   );
 
