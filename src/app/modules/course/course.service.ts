@@ -101,9 +101,25 @@ const getTheBestCourseFromDB = async () => {
   return { course, averageRating, reviewCount };
 };
 
+const updateCourseDataIntoDB = async (
+  id: string,
+  payload: Partial<TCourse>,
+) => {
+  const { tags, details, ...remainingCourseData } = payload;
+
+  const basicDataUpdate = await Course.findByIdAndUpdate(
+    id,
+    remainingCourseData,
+    { new: true },
+  );
+
+  return basicDataUpdate;
+};
+
 export const CourseServices = {
   createCourseIntoDB,
   getAllCourseFromDB,
   getCourseWithReviewFromDB,
   getTheBestCourseFromDB,
+  updateCourseDataIntoDB,
 };

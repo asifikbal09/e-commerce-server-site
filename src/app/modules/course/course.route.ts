@@ -1,10 +1,16 @@
 import { Router } from 'express';
 import { CourseController } from './course.controller';
+import validateRequest from '../../middlewares/validateRequest';
+import { CourseValidation } from './course.validation';
 
 const router = Router();
 
 router.get('/', CourseController.getAllCourse);
 router.get('/:courseId/reviews', CourseController.getCourseWithReview);
-router.get('/best', CourseController.getTheBestCourse);
+router.put(
+  '/:courseId',
+  validateRequest(CourseValidation.updateCourseValidationSchema),
+  CourseController.updateCourseData,
+);
 
-export const CourseRoutes = router;
+export const CoursesRoutes = router;
