@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { TCourse, TDetails, TTag } from './course.interface';
+import { CourseModel, TCourse, TDetails, TTag } from './course.interface';
 
 //Sub schema [tagSchema] for main schema tags property
 const tagSchema = new Schema<TTag>(
@@ -32,7 +32,7 @@ const detailsSchema = new Schema<TDetails>({
 });
 
 //Main schema [courseSchema]
-const courseSchema = new Schema<TCourse>({
+const courseSchema = new Schema<TCourse,CourseModel>({
   title: {
     type: String,
     required: true,
@@ -77,5 +77,15 @@ const courseSchema = new Schema<TCourse>({
   },
 });
 
+// studentSchema.statics.isUserExists = async function (id: string) {
+//   const existingUser = await Student.findOne({ id });
+//   return existingUser;
+// };
+
+courseSchema.statics.isCourseExists = async function (_id: string) {
+  const existingCourse = await Course.findById({ _id });
+  return existingCourse;
+};
+
 //course model
-export const Course = model<TCourse>('Course', courseSchema);
+export const Course = model<TCourse,CourseModel>('Course', courseSchema);

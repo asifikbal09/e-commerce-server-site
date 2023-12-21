@@ -1,5 +1,5 @@
+import { Model } from 'mongoose';
 import { Types } from 'mongoose';
-
 
 export type TTag = {
   name: string;
@@ -24,3 +24,8 @@ export type TCourse = {
   durationInWeeks?: number;
   details: TDetails;
 };
+
+export interface CourseModel extends Model<TCourse> {
+  // eslint-disable-next-line no-unused-vars
+  isCourseExists(_id: string): Promise<TCourse | null>;
+}

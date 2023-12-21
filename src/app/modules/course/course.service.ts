@@ -43,6 +43,11 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getCourseWithReviewFromDB = async (id: Types.ObjectId) => {
+  
+  if ((await Course.isCourseExists(id.toString())) === null) {
+    throw new AppError(500, 'The Course is not found.');
+  }
+
   const findCourseReview = await Course.aggregate([
     //stage-1
     //LookUp stage
@@ -107,6 +112,10 @@ const updateCourseDataIntoDB = async (
   id: string,
   payload: Partial<TCourse>,
 ) => {
+  if ((await Course.isCourseExists(id)) === null) {
+    throw new AppError(500, 'The Course is not found.');
+  }
+
   const { tags, details, ...remainingCourseData } = payload;
 
   const modifiedUpdatedData: Record<string, unknown> = {
