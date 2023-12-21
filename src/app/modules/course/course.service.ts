@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import { Types, isValidObjectId } from 'mongoose';
+import { Types, isValidObjectId, startSession } from 'mongoose';
 import QueryManager from '../../manager/queryManager';
 import { TCourse } from './course.interface';
 import { Course } from './course.model';
+import AppError from '../../errors/appError';
+import httpStatus from 'http-status';
 
 const createCourseIntoDB = async (payload: TCourse) => {
   const { startDate, endDate } = payload;
@@ -111,42 +113,70 @@ const updateCourseDataIntoDB = async (
     ...remainingCourseData,
   };
 
-  if (details && Object.keys(details).length) {
-    for (const [key, value] of Object.entries(details)) {
-      modifiedUpdatedData[`details.${key}`] = value;
+  const session = await startSession();
+
+  try {
+    session.startTransaction();
+
+    if (details && Object.keys(details).length) {
+      for (const [key, value] of Object.entries(details)) {
+        modifiedUpdatedData[`details.${key}`] = value;
+      }
     }
-  }
 
-  const basicDataUpdate = await Course.findByIdAndUpdate(
-    id,
-    modifiedUpdatedData,
-    { new: true },
-  );
-
-  if (tags && tags.length > 0) {
-    console.log(tags);
-    const deletedTagsName = tags
-      .filter((tag) => tag.name && tag.isDeleted)
-      .map((tag) => tag.name);
-
-    const deletedTags = await Course.findByIdAndUpdate(
+    const basicDataUpdate = await Course.findByIdAndUpdate(
       id,
-      {
-        $pull: { tags: { name: { $in: deletedTagsName } } },
-      },
-      { new: true },
+      modifiedUpdatedData,
+      { new: true, session },
     );
 
-    const addTagsName = tags.filter((tag) => tag.name && !tag.isDeleted);
+    if (!basicDataUpdate) {
+      throw new AppError(500, 'Failed to update course!');
+    }
 
-    const addTags = await Course.findByIdAndUpdate(id, {
-      $addToSet: { tags: { $each: addTagsName } },
-    });
+    if (tags && tags.length > 0) {
+      const deletedTagsName = tags
+        .filter((tag) => tag.name && tag.isDeleted)
+        .map((tag) => tag.name);
+
+      const deletedTags = await Course.findByIdAndUpdate(
+        id,
+        {
+          $pull: { tags: { name: { $in: deletedTagsName } } },
+        },
+        { new: true, runValidators: true, session },
+      );
+
+      if (!deletedTags) {
+        throw new AppError(500, 'Failed to update course!');
+      }
+
+      const addTagsName = tags.filter((tag) => tag.name && !tag.isDeleted);
+
+      const addTags = await Course.findByIdAndUpdate(
+        id,
+        {
+          $addToSet: { tags: { $each: addTagsName } },
+        },
+        { new: true, runValidators: true, session },
+      );
+
+      if (!addTagsName) {
+        throw new AppError(500, 'Failed to update course!');
+      }
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    const course = await Course.findById(id);
+
+    return course;
+  } catch (err) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(500, 'Failed to update course!');
   }
-
-  const course = await Course.findById(id);
-
-  return course;
 };
 
 export const CourseServices = {
