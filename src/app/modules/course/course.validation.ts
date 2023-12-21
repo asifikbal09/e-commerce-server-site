@@ -16,15 +16,15 @@ const detailsValidationSchema = z.object({
 //main validation schema for creating new course
 const courseValidationSchema = z.object({
   body: z.object({
-    title: z.string(),
-    instructor: z.string(),
-    categoryId: z.string(),
-    price: z.number(),
+    title: z.string().min(1, { message: "Title is required" }),
+    instructor: z.string().min(1, { message: "Instructor is required" }),
+    categoryId: z.string().min(1, { message: "Category ID is required" }),
+    price: z.number().min(0, { message: "Price must be a non-negative number" }),
     tags: z.array(tagValidationSchema),
-    startDate: z.string(),
-    endDate: z.string(),
-    language: z.string(),
-    provider: z.string(),
+    startDate: z.string().min(1, { message: "Start date is required" }),
+    endDate: z.string().min(1, { message: "End date is required" }),
+    language: z.string().min(1, { message: "Language is required" }),
+    provider: z.string().min(1, { message: "Provider is required" }),
     details: detailsValidationSchema,
   }),
 });
