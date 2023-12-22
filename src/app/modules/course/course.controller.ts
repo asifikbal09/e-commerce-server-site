@@ -9,7 +9,7 @@ const createCourse = catchAsync(async (req: Request, res: Response) => {
   const result = await CourseServices.createCourseIntoDB(course);
   res.status(httpStatus.OK).json({
     success: true,
-    message: 'course create successfully.',
+    message: 'Course created successfully.',
     data: result,
   });
 });
@@ -22,7 +22,7 @@ const getAllCourse = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     message: 'Courses retrieved successfully',
     meta: result.meta,
-    result: result.result,
+    data: result.result,
   });
 });
 
@@ -36,7 +36,7 @@ const getCourseWithReview = catchAsync(async (req, res) => {
     success: true,
     statusCode: httpStatus.OK,
     message: 'Course and Reviews retrieved successfully',
-    result: result,
+    data: result,
   });
 });
 
