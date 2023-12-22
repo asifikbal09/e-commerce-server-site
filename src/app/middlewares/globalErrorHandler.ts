@@ -26,10 +26,10 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     const gotDuplicateError = handleDuplicateError(err);
     statusCode = gotDuplicateError?.statusCode;
     message = gotDuplicateError?.message;
-    errorMessage =""
+    errorMessage = '';
   } else if (err instanceof AppError) {
     statusCode = err?.statusCode;
-    errorMessage = err?.message
+    errorMessage = err?.message;
   } else if (err instanceof Error) {
     errorMessage = err?.message;
   }

@@ -10,7 +10,7 @@ const handleDuplicateError = (err: any): TGenericErrorResponse => {
   return {
     statusCode,
     message: 'Duplicate Entry',
-    errorMessage:`${extractMessage} is already exists.`
+    errorMessage: `${extractMessage} is already exists.`,
   };
 };
 

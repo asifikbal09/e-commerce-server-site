@@ -9,8 +9,8 @@ const createReviewForCourseIntoDB = async (payload: TReview) => {
 const getAllReview = async () => {
   const result = await Review.aggregate([
     {
-      $group:{}
-    }
+      $group: {},
+    },
   ]);
   return result;
 };

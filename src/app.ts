@@ -10,7 +10,9 @@ app.use(cors());
 
 app.use('/api', router);
 
-app.get('/', (req: Request, res: Response) => res.send('Welcome to Course Review backend project.'));
+app.get('/', (req: Request, res: Response) =>
+  res.send('Welcome to Course Review backend project.'),
+);
 
 app.use(globalErrorHandler);
 

@@ -43,7 +43,6 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getCourseWithReviewFromDB = async (id: Types.ObjectId) => {
-  
   if ((await Course.isCourseExists(id.toString())) === null) {
     throw new AppError(500, 'The Course is not found.');
   }

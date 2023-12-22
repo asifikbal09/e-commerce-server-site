@@ -32,7 +32,7 @@ const detailsSchema = new Schema<TDetails>({
 });
 
 //Main schema [courseSchema]
-const courseSchema = new Schema<TCourse,CourseModel>({
+const courseSchema = new Schema<TCourse, CourseModel>({
   title: {
     type: String,
     required: true,
@@ -88,4 +88,4 @@ courseSchema.statics.isCourseExists = async function (_id: string) {
 };
 
 //course model
-export const Course = model<TCourse,CourseModel>('Course', courseSchema);
+export const Course = model<TCourse, CourseModel>('Course', courseSchema);
