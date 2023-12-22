@@ -15,7 +15,8 @@ const handleZodError = (err: ZodError): TGenericErrorResponse => {
   errorMessageArray.forEach(
     (message) =>
       (errorMessage =
-        errorMessage + `${message.path} is  ${message.message}. `.toLowerCase()),
+        errorMessage +
+        `${message.path} is  ${message.message}. `.toLowerCase()),
   );
 
   return {

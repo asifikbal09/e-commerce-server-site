@@ -11,5 +11,4 @@ router.post(
   ReviewController.createReviewForCourse,
 );
 
-
 export const ReviewRoutes = router;

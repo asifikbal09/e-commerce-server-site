@@ -13,7 +13,6 @@ const createReviewForCourse = catchAsync(async (req, res) => {
   });
 });
 
-
 export const ReviewController = {
   createReviewForCourse,
 };
