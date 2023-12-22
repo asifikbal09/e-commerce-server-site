@@ -20,7 +20,7 @@ class QueryManager<T> {
   }
 
   sortBy() {
-    const sort = this?.query?.sortBy || 'createdAt';
+    const sort = this?.query?.sortBy || '-createdAt';
     const sortInOrder = this.query.sortOrder || 'asc';
 
     const sortByFields = [
@@ -30,7 +30,7 @@ class QueryManager<T> {
       'endDate',
       'language',
       'durationInWeeks',
-      'createdAt',
+      '-createdAt',
     ];
 
     if (!sortByFields.includes(sort as string)) {

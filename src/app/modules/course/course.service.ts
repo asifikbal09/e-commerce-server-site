@@ -11,7 +11,9 @@ const createCourseIntoDB = async (payload: TCourse) => {
   const { startDate, endDate } = payload;
   const convertedStartDate: Date = new Date(startDate);
   const convertedEndDate: Date = new Date(endDate);
-
+  if (convertedStartDate > convertedEndDate) {
+    throw new AppError(500, 'Start date must be before end date.');
+  }
   const days = convertedEndDate.getTime() - convertedStartDate.getTime();
 
   payload.durationInWeeks = Math.ceil(days / (1000 * 60 * 60 * 24 * 7));
@@ -33,10 +35,12 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
     .filterByWeeks();
   const result = await courseQuery.modelQuery;
 
+  const totalDoc = await Course.find();
+
   const meta = {
-    page: query.page || 1,
-    limit: query.limit || 10,
-    total: result.length,
+    page: Number(query.page) || 1,
+    limit: Number(query.limit) || 10,
+    total: totalDoc.length,
   };
 
   return { result, meta };

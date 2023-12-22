@@ -18,6 +18,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     const getZodError = handleZodError(err);
     statusCode = getZodError?.statusCode;
     message = getZodError?.message;
+    errorMessage = getZodError?.errorMessage;
   } else if (err?.name === 'CastError') {
     const gotCastError = handelCastError(err);
     statusCode = gotCastError?.statusCode;
@@ -26,7 +27,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     const gotDuplicateError = handleDuplicateError(err);
     statusCode = gotDuplicateError?.statusCode;
     message = gotDuplicateError?.message;
-    errorMessage = '';
+    errorMessage = gotDuplicateError?.errorMessage;
   } else if (err instanceof AppError) {
     statusCode = err?.statusCode;
     errorMessage = err?.message;

@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { CourseModel, TCourse, TDetails, TTag } from './course.interface';
 
+
 //Sub schema [tagSchema] for main schema tags property
 const tagSchema = new Schema<TTag>(
   {
@@ -86,6 +87,8 @@ courseSchema.statics.isCourseExists = async function (_id: string) {
   const existingCourse = await Course.findById({ _id });
   return existingCourse;
 };
+
+
 
 //course model
 export const Course = model<TCourse, CourseModel>('Course', courseSchema);

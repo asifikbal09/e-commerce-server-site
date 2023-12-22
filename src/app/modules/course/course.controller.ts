@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 
-const createCourse = async (req: Request, res: Response) => {
+const createCourse = catchAsync(async (req: Request, res: Response) => {
   const course = req.body;
   const result = await CourseServices.createCourseIntoDB(course);
   res.status(httpStatus.OK).json({
@@ -12,7 +12,7 @@ const createCourse = async (req: Request, res: Response) => {
     message: 'course create successfully.',
     data: result,
   });
-};
+});
 
 const getAllCourse = catchAsync(async (req, res) => {
   const query = req.query;

@@ -5,10 +5,17 @@ import { TGenericErrorResponse } from '../interface/error';
 const handleZodError = (err: ZodError): TGenericErrorResponse => {
   const statusCode = httpStatus.BAD_REQUEST;
   let errorMessage: string = '';
-  const errorMessageArray = err.issues.map((issue: ZodIssue) => issue?.message);
+  const errorMessageArray = err.issues.map((issue: ZodIssue) => {
+    return {
+      path: issue.path.at(-1),
+      message: issue.message,
+    };
+  });
 
   errorMessageArray.forEach(
-    (message) => (errorMessage = errorMessage + message),
+    (message) =>
+      (errorMessage =
+        errorMessage + `${message.path} is  ${message.message}. `.toLowerCase()),
   );
 
   return {
