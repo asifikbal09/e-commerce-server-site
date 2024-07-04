@@ -41,8 +41,9 @@ const productSchema = new Schema<TProduct, ProductModel>(
       type: String,
       required: true,
     },
-    variants:{
-        type:[variantSchema]
+    variants: {
+      type: [variantSchema],
+      required: true,
     },
     inventory: {
       type: inventorySchema,
