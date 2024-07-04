@@ -11,7 +11,7 @@ app.use(cors());
 app.use('/api', router);
 
 app.get('/', (req: Request, res: Response) =>
-  res.send('Welcome to Course Review backend project.'),
+  res.send('Welcome to E-commerce server site.'),
 );
 
 app.use(globalErrorHandler);
