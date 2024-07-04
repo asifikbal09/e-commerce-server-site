@@ -1,25 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import { Types, isValidObjectId, startSession } from 'mongoose';
+import { Types, startSession } from 'mongoose';
 import QueryManager from '../../manager/queryManager';
-import { TCourse } from './course.interface';
-import { Course } from './course.model';
 import AppError from '../../errors/appError';
 import httpStatus from 'http-status';
+import { Course } from '../course/course.model';
+import { TCourse } from '../course/course.interface';
 
-const createCourseIntoDB = async (payload: TCourse) => {
-  const { startDate, endDate } = payload;
-  const convertedStartDate: Date = new Date(startDate);
-  const convertedEndDate: Date = new Date(endDate);
-  if (convertedStartDate > convertedEndDate) {
-    throw new AppError(500, 'Start date must be before end date.');
-  }
-  const days = convertedEndDate.getTime() - convertedStartDate.getTime();
-
-  payload.durationInWeeks = Math.ceil(days / (1000 * 60 * 60 * 24 * 7));
-
-  const result = await Course.create(payload);
-  return result;
+const createCourseIntoDB = async (payload) => {
 };
 
 const getAllCourseFromDB = async (query: Record<string, unknown>) => {
@@ -27,12 +15,6 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
     .pagination()
     .sortBy()
     .filterByPrice()
-    .filterByTags()
-    .filterByDate()
-    .filterByLanguage()
-    .filterByLevel()
-    .filterByProvider()
-    .filterByWeeks();
   const result = await courseQuery.modelQuery;
 
   const totalDoc = await Course.find();
@@ -192,9 +174,5 @@ const updateCourseDataIntoDB = async (
 };
 
 export const CourseServices = {
-  createCourseIntoDB,
-  getAllCourseFromDB,
-  getCourseWithReviewFromDB,
-  getTheBestCourseFromDB,
-  updateCourseDataIntoDB,
+
 };
