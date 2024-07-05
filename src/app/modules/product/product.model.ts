@@ -55,7 +55,7 @@ const productSchema = new Schema<TProduct, ProductModel>(
   },
 );
 
- //statics method for checking product exists in database or not.
+//statics method for checking product exists in database or not.
 productSchema.statics.isProductExists = async function (_id: string) {
   const existingProduct = await Product.findById({ _id });
   return existingProduct;

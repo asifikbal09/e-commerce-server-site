@@ -12,6 +12,6 @@ const createOrderValidationSchema = z.object({
   }),
 });
 
-export const OrderValidations={
-    createOrderValidationSchema
-}
+export const OrderValidations = {
+  createOrderValidationSchema,
+};

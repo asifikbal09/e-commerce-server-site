@@ -34,23 +34,23 @@ const updateProductFromDB = async (id: string, payload: Partial<TProduct>) => {
   if ((await Product.isProductExists(id)) === null) {
     throw new AppError(httpStatus.NOT_FOUND, 'Product not found!');
   }
-  const result = await Product.findByIdAndUpdate(id,payload,{new:true});
+  const result = await Product.findByIdAndUpdate(id, payload, { new: true });
 
   return result;
 };
 
-const deleteProductFromDB=async(id:string)=>{
-if((await Product.isProductExists(id))===null){
-  throw new AppError(httpStatus.NOT_FOUND,"Product not found.")
-}
-const result = await Product.findByIdAndDelete(id)
-return result
-}
+const deleteProductFromDB = async (id: string) => {
+  if ((await Product.isProductExists(id)) === null) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Product not found.');
+  }
+  const result = await Product.findByIdAndDelete(id);
+  return result;
+};
 
 export const ProductServices = {
   createProductIntoDB,
   getAllProductFormDB,
   getSingleProductFromDB,
   updateProductFromDB,
-  deleteProductFromDB
+  deleteProductFromDB,
 };

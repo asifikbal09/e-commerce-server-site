@@ -15,7 +15,7 @@ const createOrderIntoDB = async (payload: TOrder) => {
   if (quantity > productInfo?.inventory?.quantity) {
     throw new AppError(
       httpStatus.NOT_ACCEPTABLE,
-      "Insufficient quantity available in inventory",
+      'Insufficient quantity available in inventory',
     );
   }
   const session = await startSession();
@@ -23,7 +23,7 @@ const createOrderIntoDB = async (payload: TOrder) => {
   try {
     session.startTransaction();
 
-    const newOrder = await Order.create([payload ], {session});
+    const newOrder = await Order.create([payload], { session });
 
     if (!newOrder) {
       throw new AppError(500, 'Failed to create order!');
@@ -36,7 +36,10 @@ const createOrderIntoDB = async (payload: TOrder) => {
       },
     };
 
-    await Product.findByIdAndUpdate(productId, inventoryData, { session, new: true });
+    await Product.findByIdAndUpdate(productId, inventoryData, {
+      session,
+      new: true,
+    });
 
     await session.commitTransaction();
     await session.endSession();
@@ -49,14 +52,14 @@ const createOrderIntoDB = async (payload: TOrder) => {
   }
 };
 
-const getAllOrderFromDB=async(query:Record<string,unknown>)=>{
-    const orderQuery = new QueryManager(Order.find(), query).filterByEmail();
-    
-      const result = await orderQuery.modelQuery;
-      return result;
-}
+const getAllOrderFromDB = async (query: Record<string, unknown>) => {
+  const orderQuery = new QueryManager(Order.find(), query).filterByEmail();
+
+  const result = await orderQuery.modelQuery;
+  return result;
+};
 
 export const OrderServices = {
   createOrderIntoDB,
-  getAllOrderFromDB
+  getAllOrderFromDB,
 };
