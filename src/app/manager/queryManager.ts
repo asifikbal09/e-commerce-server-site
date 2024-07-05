@@ -24,7 +24,12 @@ class QueryManager<T> {
 
     return this;
   }
- 
+
+  filterByEmail() {
+    const email = this?.query?.email;
+    console.log(email);
+    return this;
+  }
 }
 
 export default QueryManager;
