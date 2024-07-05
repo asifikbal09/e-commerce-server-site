@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 const variantSchema = z.object({
     type: z.string({
       required_error: "Variant type is required",
@@ -7,6 +8,11 @@ const variantSchema = z.object({
       required_error: "Variant value is required",
     }),
   });
+
+const updateVariantSchema = z.object({
+    type: z.string().optional(),
+    value: z.string().optional(),
+  }).optional();
   
 
   const inventorySchema = z.object({
@@ -17,6 +23,11 @@ const variantSchema = z.object({
       required_error: "In-stock status is required",
     }),
   });
+
+  const updateInventorySchema = z.object({
+    quantity: z.number().optional(),
+    inStock: z.boolean().optional(),
+  }).optional();
 
 const createProductValidationSchema = z.object({
   body: z.object({
@@ -39,8 +50,21 @@ const createProductValidationSchema = z.object({
     inventory: inventorySchema,
   }),
 });
+const updateProductValidationSchema = z.object({
+  body: z.object({
+    name: z.string().optional(),
+    description: z.string().optional(),
+    price: z.number().optional(),
+    tags: z.array(z.string().optional()).optional(),
+    category: z.string().optional(),
+    variants: z.array(updateVariantSchema).optional(),
+    inventory: updateInventorySchema.optional(),
+  }),
+});
+
 
 
 export const ProductValidations={
-    createProductValidationSchema
+    createProductValidationSchema,
+    updateProductValidationSchema
 }

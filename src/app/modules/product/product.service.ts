@@ -6,6 +6,7 @@ import QueryManager from '../../manager/queryManager';
 import { ProductSearchableFields } from './product.constent';
 import { TProduct } from './product.interface';
 import { Product } from './product.model';
+import { Types } from 'mongoose';
 
 const createProductIntoDB = async (payload: TProduct) => {
   const result = await Product.create(payload);
@@ -29,8 +30,18 @@ const getSingleProductFromDB = async (id: string) => {
   return result;
 };
 
+const updateProductFromDB = async (id: string, payload: Partial<TProduct>) => {
+  if ((await Product.isProductExists(id)) === null) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Product not found!');
+  }
+  const result = await Product.findByIdAndUpdate(id,payload);
+  
+  return result;
+};
+
 export const ProductServices = {
   createProductIntoDB,
   getAllProductFormDB,
   getSingleProductFromDB,
+  updateProductFromDB,
 };
