@@ -12,6 +12,23 @@ const createProduct = catchAsync(async (req, res) => {
   });
 });
 
+const getAllProduct = catchAsync(async (req, res) => {
+  console.log(req.query)
+  let massage: string = '';
+  if (req.query?.searchTerm) {
+    massage = `Products matching search term '${req.query?.searchTerm}' fetched successfully!`;
+  } else {
+    massage = 'Product fetched successfully!';
+  }
+  const result = await ProductServices.getAllProductFormDB(req.query);
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: massage,
+    data: result,
+  });
+});
+
 export const ProductController = {
   createProduct,
+  getAllProduct,
 };

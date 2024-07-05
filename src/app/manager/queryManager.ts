@@ -1,5 +1,4 @@
-import { Query } from 'mongoose';
-import AppError from '../errors/appError';
+import { FilterQuery, Query } from 'mongoose';
 
 class QueryManager<T> {
   public modelQuery: Query<T[], T>;
@@ -10,62 +9,22 @@ class QueryManager<T> {
     this.query = query;
   }
 
-  pagination() {
-    const page = Number(this.query.page) || 1;
-    const limit = Number(this.query.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    this.modelQuery = this.modelQuery.skip(skip).limit(limit);
-    return this;
-  }
-
-  sortBy() {
-    const sort = this?.query?.sortBy || '-createdAt';
-    const sortInOrder = this.query.sortOrder || 'asc';
-
-    const sortByFields = [
-      'title',
-      'price',
-      'startDate',
-      'endDate',
-      'language',
-      'durationInWeeks',
-      '-createdAt',
-    ];
-
-    if (!sortByFields.includes(sort as string)) {
-      throw new AppError(500, 'Please put a valid string.');
-    }
-
-    if (sortInOrder === 'asc') {
-      this.modelQuery = this?.modelQuery?.sort(sort as string);
-    }
-
-    if (sortInOrder === 'desc') {
-      this.modelQuery = this?.modelQuery?.sort(('-' + sort) as string);
+  search(searchableFields: string[]) {
+    const searchTerm = this?.query?.searchTerm;
+    if (searchTerm) {
+      this.modelQuery = this.modelQuery.find({
+        $or: searchableFields.map(
+          (field) =>
+            ({
+              [field]: { $regex: searchTerm, $options: 'i' },
+            }) as FilterQuery<T>,
+        ),
+      });
     }
 
     return this;
   }
-  filterByPrice() {
-    const minPrice = Number(this.query.minPrice) || 0;
-    const maxPrice = Number(this.query.maxPrice) || 1000;
-
-    this.modelQuery = this.modelQuery.find({
-      price: { $gte: minPrice, $lte: maxPrice },
-    });
-    return this;
-  }
-  filterByProvider() {
-    const provider = this.query.provider;
-
-    if (provider) {
-      this.modelQuery = this.modelQuery.find({ provider: provider });
-    }
-    return this;
-  }
-  
-  
+ 
 }
 
 export default QueryManager;
