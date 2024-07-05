@@ -1,12 +1,11 @@
-# Course Review Backend Project
+# E-commerce Backend Project
 
-This project is a backend application for managing courses, categories, and reviews. It is built using TypeScript, Express, and Mongoose.
+This project is a backend application for managing product and order. It is built using TypeScript, Express, and Mongoose.
 
 ## Live Link
 
-### [Course-review-live-link](https://assignment-3-three-zeta.vercel.app/) : https://assignment-3-three-zeta.vercel.app/
-
 ## Technology Stack
+
 1. **TypeScript:**
 
 TypeScript is a superset of JavaScript that adds static typing to the language. It helps catch errors during development and improves code quality. TypeScript is transpiled to JavaScript before execution.
@@ -51,56 +50,134 @@ These technologies and libraries together provide a robust foundation for buildi
 
 ## Routes
 
-The Course Review Backend project encompasses eight distinct routes, each tailored to specific actions and operations:
+This document outlines the endpoints for an e-commerce API, detailing how to manage products and orders. The API supports CRUD operations for products and various operations for managing orders.
 
-1.  **Create Course (POST):**
-    
-    - Endpoint: `/api/course`
-    - Method: POST
-    - Description: Create a new course with essential details.
+### Products
 
-2.  **Get Courses (GET):**
-    
-    - Endpoint: `/api/courses`
-    - Method: GET
-    - Description: Retrieve a list of courses with flexible query parameters for sorting, filtering, and pagination.
+1. **Create Product**
 
-3.  **Create Category (POST):**
-    
-    - Endpoint: `/api/categories`
-    - Method: POST
-    - Description: Establish new categories for courses, enhancing organization and classification.
+   - **Endpoint:** `/products`
+   - **Method:** POST
+   - **Description:** Creates a new product with details such as name, description, price, category, tags, variants, and inventory information.
+   - **Request Body:**
+     ```json
+     {
+       "name": "iPhone 13",
+       "description": "A sleek and powerful smartphone with cutting-edge features.",
+       "price": 999,
+       "category": "Electronics",
+       "tags": ["smartphone", "Apple", "iOS"],
+       "variants": [
+         {
+           "type": "Color",
+           "value": "Midnight Blue"
+         },
+         {
+           "type": "Storage Capacity",
+           "value": "256GB"
+         }
+       ],
+       "inventory": {
+         "quantity": 50,
+         "inStock": true
+       }
+     }
+     ```
 
-4.  **Get Categories (GET):**
-    
-    - Endpoint: `/api/categories`
-    - Method: GET
-    - Description: Retrieve a comprehensive list of all available categories.
+2. **Get All Products**
 
-5.  **Create Review (POST):**
-    
-    - Endpoint: `/api/reviews`
-    - Method: POST
-    - Description: Share user experiences by creating reviews for specific courses.
+   - **Endpoint:** `/products`
+   - **Method:** GET
+   - **Description:** Retrieves a list of all products available in the e-commerce store.
 
-6.  **Update Course (PUT):**
-    
-    - Endpoint: `/api/courses/:courseId`
-    - Method: PUT
-    - Description: Modify and update the information associated with a particular course.
+3. **Search a Product**
 
-7.  **Get Course with Reviews (GET):**
-    
-    - Endpoint: `/api/courses/:courseId/reviews`
-    - Method: GET
-    - Description: Retrieve detailed information about a course along with its associated reviews.
+   - **Endpoint:** `/products?searchTerm=watch`
+   - **Method:** GET
+   - **Description:** Searches for products based on the provided search term.
+   - **Query Parameter:**
+     - `searchTerm`: The term to search for (e.g., "watch").
 
-8.  **Get Best Course Based on Average Review (GET):**
-    
-    - Endpoint: `/api/course/best`
-    - Method: GET
-    - Description: Identify and retrieve the best course based on average review ratings.
+4. **Get Single Product**
 
+   - **Endpoint:** `/products/:productId`
+   - **Method:** GET
+   - **Description:** Retrieves details of a single product by its unique ID.
+   - **Path Parameter:**
+     - `productId`: The ID of the product to retrieve.
+
+5. **Update Product**
+
+   - **Endpoint:** `/products/:productId`
+   - **Method:** PUT
+   - **Description:** Updates the details of an existing product by its unique ID.
+   - **Path Parameter:**
+     - `productId`: The ID of the product to update.
+   - **Request Body:**
+     ```json
+     {
+       "name": "iPhone 13",
+       "description": "A sleek and powerful smartphone with cutting-edge features.",
+       "price": 999,
+       "category": "Electronics",
+       "tags": ["smartphone", "Apple", "iOS"],
+       "variants": [
+         {
+           "type": "Color",
+           "value": "Midnight Blue"
+         },
+         {
+           "type": "Storage Capacity",
+           "value": "256GB"
+         }
+       ],
+       "inventory": {
+         "quantity": 50,
+         "inStock": true
+       }
+     }
+     ```
+
+6. **Delete Product**
+   - **Endpoint:** `/products/:productId`
+   - **Method:** DELETE
+   - **Description:** Deletes an existing product by its unique ID.
+   - **Path Parameter:**
+     - `productId`: The ID of the product to delete.
+
+### Orders
+
+1. **Create Order**
+
+   - **Endpoint:** `/orders`
+   - **Method:** POST
+   - **Description:** Creates a new order with details such as customer email, product ID, price, and quantity.
+   - **Request Body:**
+     ```json
+     {
+       "email": "asif@mail.com",
+       "productId": "6687be4e0e3d6534247e43e8",
+       "price": 999,
+       "quantity": 12
+     }
+     ```
+
+2. **Get All Orders**
+
+   - **Endpoint:** `/orders`
+   - **Method:** GET
+   - **Description:** Retrieves a list of all orders placed in the e-commerce store.
+
+3. **Get Order by Email**
+   - **Endpoint:** `/orders?email={email}`
+   - **Method:** GET
+   - **Description:** Retrieves all orders associated with a specific email address.
+   - **Query Parameter:**
+     - `email`: The email address associated with the orders (e.g., "asif@mail.com").
+
+---
+
+This API provides essential endpoints to manage the core aspects of an e-commerce platform, including creating, updating, retrieving, and deleting products, as well as managing orders. This allows for comprehensive management of both inventory and customer orders.
 
 ## How to Run Locally
 
@@ -114,49 +191,60 @@ cd <project-folder>
 ```
 
 ### 2. Install Dependencies
+
 Install the project dependencies using npm:
+
 ```bash
 npm i
 ```
+
 ### 3. Set Environment Variables
+
 Create a .env file in the root of your project and set any necessary environment variables, such as database connection details. Make sure you have the required environment variables according to your project.
 
 ### 4. Run the Project
+
 Run the project in development mode using the provided script:
+
 ```bash
 npm run start:dev
 
 ```
+
 This script uses `ts-node-dev` to run the TypeScript code in development mode with automatic restarts on file changes.
 
 ### 5. Testing
+
 You can test your API endpoints using tools like Postman, Insomnia, or by making HTTP requests directly using a tool like `curl` or a web browser.
 
 ### 6. Linting and Formatting
+
 You can lint your code and fix formatting issues using the provided scripts:
+
 ```bash
 npm run lint
 npm run lint:fix
 
 ```
+
 These commands use ESLint for linting and Prettier for code formatting.
 
 ### 7. Building for Production
+
 If you want to deploy your application in production, you can build the TypeScript code using:
 
 ```bash
 npm run build
 
 ```
+
 Then start the production server:
+
 ```bash
 npm run start:prod
 
 ```
+
 ### Database Setup
+
 Make sure you have a MongoDB instance running if your project uses MongoDB, and that your database connection details are correctly configured in the .env file.
-
-
-This project not only addresses the fundamental aspects of course management but also prioritizes user experience by incorporating features like reviews and categorization. With a strong technological foundation, it aims to provide a seamless and efficient backend solution for educational platforms and course management systems.
-
-Feel free to explore the various routes and functionalities, and enjoy developing with this feature-rich Course Review Backend!

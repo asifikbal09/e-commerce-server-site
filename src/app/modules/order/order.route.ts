@@ -11,4 +11,6 @@ router.post(
   OrderControllers.createOrder,
 );
 
+router.get('/', OrderControllers.getAllOrder);
+
 export const OrderRoutes = router;

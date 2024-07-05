@@ -4,6 +4,7 @@ import { Product } from '../product/product.model';
 import { TOrder } from './order.interface';
 import { startSession } from 'mongoose';
 import { Order } from './order.model';
+import QueryManager from '../../manager/queryManager';
 
 const createOrderIntoDB = async (payload: TOrder) => {
   const { productId, quantity } = payload;
@@ -27,7 +28,6 @@ const createOrderIntoDB = async (payload: TOrder) => {
     if (!newOrder) {
       throw new AppError(500, 'Failed to create order!');
     }
-    console.log("newOrder",newOrder);
     const newQuantity = productInfo?.inventory?.quantity - quantity;
     const inventoryData = {
       inventory: {
@@ -49,6 +49,14 @@ const createOrderIntoDB = async (payload: TOrder) => {
   }
 };
 
+const getAllOrderFromDB=async(query:Record<string,unknown>)=>{
+    const orderQuery = new QueryManager(Order.find(), query).filterByEmail();
+    
+      const result = await orderQuery.modelQuery;
+      return result;
+}
+
 export const OrderServices = {
   createOrderIntoDB,
+  getAllOrderFromDB
 };

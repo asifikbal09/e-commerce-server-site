@@ -27,7 +27,9 @@ class QueryManager<T> {
 
   filterByEmail() {
     const email = this?.query?.email;
-    console.log(email);
+    if(email){
+      this.modelQuery = this.modelQuery.find({email:email});
+    }
     return this;
   }
 }
