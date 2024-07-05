@@ -34,7 +34,7 @@ const updateProductFromDB = async (id: string, payload: Partial<TProduct>) => {
   if ((await Product.isProductExists(id)) === null) {
     throw new AppError(httpStatus.NOT_FOUND, 'Product not found!');
   }
-  const result = await Product.findByIdAndUpdate(id,payload);
+  const result = await Product.findByIdAndUpdate(id,payload,{new:true});
 
   return result;
 };
