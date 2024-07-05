@@ -13,7 +13,6 @@ const createProduct = catchAsync(async (req, res) => {
 });
 
 const getAllProduct = catchAsync(async (req, res) => {
-  console.log(req.query)
   let massage: string = '';
   if (req.query?.searchTerm) {
     massage = `Products matching search term '${req.query?.searchTerm}' fetched successfully!`;
@@ -28,7 +27,18 @@ const getAllProduct = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleProduct = catchAsync(async (req, res) => {
+  const { productId } = req.params;
+  const result = await ProductServices.getSingleProductFromDB(productId);
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: 'Product fetched successfully!',
+    data: result,
+  });
+});
+
 export const ProductController = {
   createProduct,
   getAllProduct,
+  getSingleProduct
 };

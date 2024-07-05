@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
+import httpStatus from 'http-status';
+import AppError from '../../errors/appError';
 import QueryManager from '../../manager/queryManager';
 import { ProductSearchableFields } from './product.constent';
 import { TProduct } from './product.interface';
@@ -19,7 +21,16 @@ const getAllProductFormDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
+const getSingleProductFromDB = async (id: string) => {
+  if ((await Product.isProductExists(id)) === null) {
+    throw new AppError(httpStatus.NOT_FOUND, 'The product is not found.');
+  }
+  const result = await Product.findById(id);
+  return result;
+};
+
 export const ProductServices = {
   createProductIntoDB,
-  getAllProductFormDB
+  getAllProductFormDB,
+  getSingleProductFromDB,
 };
